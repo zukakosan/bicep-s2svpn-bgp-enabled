@@ -7,7 +7,7 @@ module defaultNSG './modules/NSG.bicep' = {
   name: 'NetworkSecurityGroup'
   params:{
     location: location
-    name: 'default-nsg'  
+    name: 'nsg-default'  
   }
 }
 
