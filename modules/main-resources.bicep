@@ -1,5 +1,6 @@
 param location string
 param nsgId string
+param vnetName string
 param vpngwName string
 param vnetAddressPrefix string
 param subnet1AddressPrefix string
@@ -12,7 +13,7 @@ param vmAdminPassword string
 
 // VNETの作成
 resource vpnVNet 'Microsoft.Network/virtualNetworks@2019-11-01' = {
-  name: 'vpn-cloud-vnet'
+  name: vnetName
   location: location
   properties: {
     addressSpace: {
@@ -141,7 +142,7 @@ resource ubuntuVM 'Microsoft.Compute/virtualMachines@2020-12-01' = {
       vmSize: 'Standard_A2_v2'
     }
     osProfile: {
-      computerName: 'cloudubuntu'
+      computerName: vmName
       adminUsername: vmAdminUsername
       adminPassword: vmAdminPassword
     }
@@ -153,7 +154,7 @@ resource ubuntuVM 'Microsoft.Compute/virtualMachines@2020-12-01' = {
         version: 'latest'
       }
       osDisk: {
-        name: 'cloudUbuntu-osdisk'
+        name: 'osdisk-${vmName}'
         caching: 'ReadWrite'
         createOption: 'FromImage'
       }

@@ -16,12 +16,13 @@ module cloudInfra './modules/main-resources.bicep' = {
   params: {
     location: location
     nsgId: defaultNSG.outputs.nsgId
-    vpngwName: 'vpngw-Cloud'
+    vnetName: 'vnet-cloud'
+    vpngwName: 'vpngw-cloud'
     vnetAddressPrefix: '10.0.0.0/16'
     gatewaySubnetAddressPrefix: '10.0.0.0/24'
     subnet1AddressPrefix: '10.0.1.0/24'
     asn: 65010
-    vmName: 'ubuntu-Cloud'
+    vmName: 'ubuntu-cloud'
     vmAdminUsername: vmAdminUsername
     vmAdminPassword: vmAdminPassword
   }
@@ -32,12 +33,13 @@ module onpInfra './modules/main-resources.bicep' = {
   params: {
     location: location
     nsgId: defaultNSG.outputs.nsgId
-    vpngwName: 'vpngw-Onp'
+    vnetName: 'vnet-onp'
+    vpngwName: 'vpngw-onp'
     vnetAddressPrefix: '10.100.0.0/16'
     gatewaySubnetAddressPrefix: '10.100.0.0/24'
     subnet1AddressPrefix: '10.100.1.0/24'
     asn: 65020
-    vmName: 'ubuntu-Onp'
+    vmName: 'ubuntu-onp'
     vmAdminUsername: vmAdminUsername
     vmAdminPassword: vmAdminPassword
   }
