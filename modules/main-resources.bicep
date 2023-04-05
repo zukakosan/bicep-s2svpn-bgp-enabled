@@ -6,6 +6,9 @@ param subnet1AddressPrefix string
 param gatewaySubnetAddressPrefix string
 param asn int
 param vmName string
+param vmAdminUsername string
+@secure()
+param vmAdminPassword string
 
 // VNETの作成
 resource vpnVNet 'Microsoft.Network/virtualNetworks@2019-11-01' = {
@@ -139,8 +142,8 @@ resource ubuntuVM 'Microsoft.Compute/virtualMachines@2020-12-01' = {
     }
     osProfile: {
       computerName: 'cloudubuntu'
-      adminUsername: 'AzureAdmin'
-      adminPassword: 'P@ssw0rd#20230405'
+      adminUsername: vmAdminUsername
+      adminPassword: vmAdminPassword
     }
     storageProfile: {
       imageReference: {
@@ -170,3 +173,6 @@ resource ubuntuVM 'Microsoft.Compute/virtualMachines@2020-12-01' = {
     // }
   }
 }
+
+output vpngwId string = vpngw.id
+output lngId string = vpngwLNG.id
