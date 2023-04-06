@@ -64,10 +64,6 @@ resource conncetionCloudtoOnp 'Microsoft.Network/connections@2020-11-01' = {
     routingWeight: 0
     sharedKey: 'zukako'
   }
-  dependsOn: [
-    cloudInfra
-    onpInfra
-  ]
 }
 
 // Connection from Onp to Cloud
