@@ -2,6 +2,7 @@ param location string
 param vmAdminUsername string
 @secure()
 param vmAdminPassword string
+param principalId string
 
 module defaultNSG './modules/NSG.bicep' = {
   name: 'NetworkSecurityGroup'
@@ -87,4 +88,16 @@ resource connectionOnptoCloud 'Microsoft.Network/connections@2020-11-01' = {
     routingWeight: 0
     sharedKey: 'zukako'
   }
+}
+
+//contribution role to this resource group
+module roleAssignment './modules/rbac-contribution.bicep' = {
+  name: 'roleAssignment'
+  params: {
+    principalId: principalId
+  }
+  dependsOn: [
+    cloudInfra
+    onpInfra
+  ]
 }
