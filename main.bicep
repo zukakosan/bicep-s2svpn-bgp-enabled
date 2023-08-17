@@ -10,14 +10,14 @@ module defaultNSGSite1 './modules/NSG.bicep' = {
   name: 'NetworkSecurityGroupSite1'
   params:{
     location: locationSite1
-    name: 'nsg-default-${locationSite1}'  
+    name: 'nsg-site1'  
   }
 }
 module defaultNSGSite2 './modules/NSG.bicep' = {
   name: 'NetworkSecurityGroupSite2'
   params:{
     location: locationSite2
-    name: 'nsg-default-${locationSite2}'  
+    name: 'nsg-site2'  
   }
 }
 
