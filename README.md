@@ -45,7 +45,7 @@ PING 10.0.1.4 (10.0.1.4) 56(84) bytes of data.
 64 bytes from 10.0.1.4: icmp_seq=2 ttl=64 time=12.1 ms
 64 bytes from 10.0.1.4: icmp_seq=3 ttl=64 time=12.1 ms
 ```
-- As you can see effective routes, the VM recieves the routes for the peer VNet.
+As you can see effective routes, the VM recieves the routes for the peer VNet.
 ![](./img/effectiveroutes.png) 
 
 ## For more information
