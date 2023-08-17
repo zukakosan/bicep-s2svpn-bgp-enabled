@@ -2,7 +2,7 @@
 This bicep file deploys resources for S2S VPN between VNets enabling BGP.
 
 The architecture image is bellow:
-![architecture](./img/architecture.png)
+![architecture](./img/env.png)
 
 # How to use
 Create `params.json` to deploy resources. Please refer [params-sample.json](./params-sample.json)
