@@ -1,4 +1,5 @@
 param location string
+param locationPeer string
 param nsgId string
 param vnetName string
 param vpngwName string
@@ -53,7 +54,7 @@ resource vpnVNet 'Microsoft.Network/virtualNetworks@2019-11-01' = {
 
 // GW用パブリックIPの作成
 resource vpngwPublicIP 'Microsoft.Network/publicIPAddresses@2022-07-01' = {
-  name: 'pip-${vpngwName}'
+  name: '${vpngwName}-pip'
   // name: 'sample-gw-pip'
   location: location
   sku: {
@@ -66,7 +67,7 @@ resource vpngwPublicIP 'Microsoft.Network/publicIPAddresses@2022-07-01' = {
 
 // VPN GWの作成
 resource vpngw 'Microsoft.Network/virtualNetworkGateways@2020-11-01' = {
-  name: 'gw-${vpngwName}'
+  name: vpngwName
   location: location
   properties: {
     bgpSettings: {
@@ -75,7 +76,7 @@ resource vpngw 'Microsoft.Network/virtualNetworkGateways@2020-11-01' = {
     }
     ipConfigurations: [
       {
-        name: 'gw-ipconfig-${vpngwName}'
+        name: '${vpngwName}-ipconfig1'
         properties: {
           privateIPAllocationMethod: 'Dynamic'
           subnet: {
@@ -100,7 +101,7 @@ resource vpngw 'Microsoft.Network/virtualNetworkGateways@2020-11-01' = {
 //クラウド側VPNGatewayのlocal network gateway
 resource vpngwLNG 'Microsoft.Network/localNetworkGateways@2019-11-01' = {
   name: 'lng-${vpngwName}'
-  location: location
+  location: locationPeer
   properties: {
     bgpSettings:{
       asn: asn
@@ -117,7 +118,7 @@ resource vpngwLNG 'Microsoft.Network/localNetworkGateways@2019-11-01' = {
 
 // クラウドおよびオンプレVNETにVM作成
 resource vmNic 'Microsoft.Network/networkInterfaces@2020-11-01' = {
-  name: 'nic-${vmName}'
+  name: '${vmName}-nic'
   location: location
   properties: {
     ipConfigurations: [
@@ -135,7 +136,7 @@ resource vmNic 'Microsoft.Network/networkInterfaces@2020-11-01' = {
 }
 
 resource ubuntuVM 'Microsoft.Compute/virtualMachines@2020-12-01' = {
-  name: 'vm-${vmName}'
+  name: vmName
   location: location
   properties: {
     hardwareProfile: {
@@ -154,7 +155,7 @@ resource ubuntuVM 'Microsoft.Compute/virtualMachines@2020-12-01' = {
         version: 'latest'
       }
       osDisk: {
-        name: 'osdisk-${vmName}'
+        name: '${vmName}-osdisk'
         caching: 'ReadWrite'
         createOption: 'FromImage'
       }

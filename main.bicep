@@ -1,29 +1,39 @@
-param location string
+param locationSite1 string
+param locationSite2 string
+
 param vmAdminUsername string
 @secure()
 param vmAdminPassword string
 param principalId string
 
-module defaultNSG './modules/NSG.bicep' = {
-  name: 'NetworkSecurityGroup'
+module defaultNSGSite1 './modules/NSG.bicep' = {
+  name: 'NetworkSecurityGroupSite1'
   params:{
-    location: location
-    name: 'nsg-default'  
+    location: locationSite1
+    name: 'nsg-default-${locationSite1}'  
+  }
+}
+module defaultNSGSite2 './modules/NSG.bicep' = {
+  name: 'NetworkSecurityGroupSite2'
+  params:{
+    location: locationSite2
+    name: 'nsg-default-${locationSite2}'  
   }
 }
 
 module cloudInfra './modules/main-resources.bicep' = {
   name: 'cloudInfra'
   params: {
-    location: location
-    nsgId: defaultNSG.outputs.nsgId
+    location: locationSite1
+    locationPeer: locationSite2
+    nsgId: defaultNSGSite1.outputs.nsgId
     vnetName: 'vnet-cloud'
     vpngwName: 'vpngw-cloud'
     vnetAddressPrefix: '10.0.0.0/16'
     gatewaySubnetAddressPrefix: '10.0.0.0/24'
     subnet1AddressPrefix: '10.0.1.0/24'
     asn: 65010
-    vmName: 'ubuntu-cloud'
+    vmName: 'vm-ubuntu-cloud'
     vmAdminUsername: vmAdminUsername
     vmAdminPassword: vmAdminPassword
   }
@@ -32,15 +42,16 @@ module cloudInfra './modules/main-resources.bicep' = {
 module onpInfra './modules/main-resources.bicep' = {
   name: 'onpInfra'
   params: {
-    location: location
-    nsgId: defaultNSG.outputs.nsgId
+    location: locationSite2
+    locationPeer: locationSite1
+    nsgId: defaultNSGSite2.outputs.nsgId
     vnetName: 'vnet-onp'
     vpngwName: 'vpngw-onp'
     vnetAddressPrefix: '10.100.0.0/16'
     gatewaySubnetAddressPrefix: '10.100.0.0/24'
     subnet1AddressPrefix: '10.100.1.0/24'
     asn: 65020
-    vmName: 'ubuntu-onp'
+    vmName: 'vm-ubuntu-onp'
     vmAdminUsername: vmAdminUsername
     vmAdminPassword: vmAdminPassword
   }
@@ -49,7 +60,7 @@ module onpInfra './modules/main-resources.bicep' = {
 // Connection from Cloud to Onp
 resource conncetionCloudtoOnp 'Microsoft.Network/connections@2020-11-01' = {
   name: 'fromCloudtoOnp'
-  location: location
+  location: locationSite1
   properties: {
     enableBgp: true
     virtualNetworkGateway1: {
@@ -69,7 +80,7 @@ resource conncetionCloudtoOnp 'Microsoft.Network/connections@2020-11-01' = {
 // Connection from Onp to Cloud
 resource connectionOnptoCloud 'Microsoft.Network/connections@2020-11-01' = {
   name: 'fromOnptoCloud'
-  location: location
+  location: locationSite2
   properties: {
     enableBgp: true
     virtualNetworkGateway1: {
