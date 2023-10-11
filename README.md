@@ -52,3 +52,6 @@ As you can see effective routes, the VM recieves the routes for the peer VNet.
 Please refer this article.
 
 https://zenn.dev/microsoft/articles/8d1558a8a2127c
+
+# Lisence
+This project is licensed under the MIT License, see the LICENSE.txt file for details.
